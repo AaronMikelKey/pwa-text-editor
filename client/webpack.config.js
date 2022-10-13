@@ -4,7 +4,7 @@ const HotModuleReplacementPlugin = require('webpack').HotModuleReplacementPlugin
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const path = require('path')
-const { InjectManifest } = require('workbox-webpack-plugin')
+const { InjectManifest, GenerateSW } = require('workbox-webpack-plugin')
 
 // TODO: Add and configure workbox plugins for a service worker and manifest file.
 
@@ -26,6 +26,7 @@ module.exports = () => {
 				title: 'JATE',
 				favicon: './src/images/logo.png',
 				template: './index.html',
+				publicPath: '/',
 			}),
 			/*new CopyWebpackPlugin({
 				patterns: [
@@ -35,6 +36,18 @@ module.exports = () => {
 					},
 				],
 			}), */
+			new GenerateSW({
+				exclude: [/\.(?:png|jpg|jpeg|svg)$/],
+				runtimeCaching: [
+					{
+						urlPattern: [/\.(?:png|jpg|jpeg|svg)$/],
+						handler: 'CacheFirst',
+						options: {
+							cacheName: 'images',
+						},
+					},
+				],
+			}),
 			new InjectManifest({
 				swSrc: './src-sw.js',
 			}),
@@ -45,10 +58,13 @@ module.exports = () => {
 					'A text editor that also uses a service worker to work on and offline',
 				background_color: '#225ca3',
 				theme_color: '#225ca3',
+				fingerprints: false,
+				includeDirectory: true,
 				icons: [
 					{
 						src: path.resolve('src/images/logo.png'),
 						sizes: [96, 128, 256],
+						destination: path.join('assets', 'icons'),
 					},
 				],
 			}),
@@ -63,11 +79,12 @@ module.exports = () => {
 				},
 				{
 					test: /\.(png|jpe?g|gif)$/i,
-					use: [
-						{
-							loader: 'file-loader',
-						},
-					],
+					loader: 'file-loader',
+					options: {
+						name: '[path][name].[ext]',
+						outputPath: 'assets/icons',
+						publicPath: 'assets/icons',
+					},
 				},
 				{
 					test: /\.css$/i,

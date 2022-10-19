@@ -28,28 +28,9 @@ module.exports = () => {
 				template: './index.html',
 				publicPath: '/',
 			}),
-			/*new CopyWebpackPlugin({
-				patterns: [
-					{
-						from: path.resolve(__dirname, '../site.webmanifest'),
-						to: path.resolve(__dirname, '../dist'),
-					},
-				],
-			}), */
-			new GenerateSW({
-				exclude: [/\.(?:png|jpg|jpeg|svg)$/],
-				runtimeCaching: [
-					{
-						urlPattern: [/\.(?:png|jpg|jpeg|svg)$/],
-						handler: 'CacheFirst',
-						options: {
-							cacheName: 'images',
-						},
-					},
-				],
-			}),
 			new InjectManifest({
-				swSrc: './src-sw.js',
+				swSrc: '/src-sw.js',
+				swDest: 'src-sw.js',
 			}),
 			new WebpackPwaManifest({
 				name: 'Just Another Text Editor',

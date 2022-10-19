@@ -20,11 +20,11 @@ const pageCache = new CacheFirst({
 })
 
 warmStrategyCache({
-	urls: ['/index.html', '/'],
+	urls: ['/'],
 	strategy: pageCache,
 })
 
 registerRoute(({ request }) => request.mode === 'navigate', pageCache)
 
 // TODO: Implement asset caching
-registerRoute(pageCache)
+registerRoute(({ request }) => request.destination === 'image', pageCache)

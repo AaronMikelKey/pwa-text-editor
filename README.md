@@ -18,10 +18,6 @@ This is a progressive web application (PWA) that allows you to edit text on a we
 
 [License](#License)
 
-[Contributing](#Contributing)
-
-[Tests](#Tests)
-
 [Questions](#Questions)
 
 ---

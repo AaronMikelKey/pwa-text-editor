@@ -18,6 +18,7 @@ module.exports = () => {
 		output: {
 			filename: '[name].bundle.js',
 			path: path.resolve(__dirname, 'dist'),
+			publicPath: '/',
 		},
 		plugins: [
 			new HotModuleReplacementPlugin(),
@@ -48,6 +49,9 @@ module.exports = () => {
 						destination: path.join('assets', 'icons'),
 					},
 				],
+			}),
+			new CopyWebpackPlugin({
+				patterns: [{ from: 'src/images/logo.png' }],
 			}),
 		],
 
